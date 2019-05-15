@@ -5,4 +5,10 @@
 # is restricted to this project.
 use Mix.Config
 
+config :controller, ecto_repos: [Controller.Repo]
+
+config :controller, Controller.Repo,
+  adapter: Sqlite.Ecto2,
+  database: "database-#{Mix.target()}.sqlite3"
+
 import_config "#{Mix.target()}.exs"

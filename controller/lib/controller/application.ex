@@ -15,14 +15,15 @@ defmodule Controller.Application do
   end
 
   # List all child processes to be supervised
-  def children(:host) do
-    [
-      # Starts a worker by calling: Controller.Worker.start_link(arg)
-      # {Controller.Worker, arg},
-    ]
+  defp children(platform) do
+    [Controller.Repo | platform_children(platform)]
   end
 
-  def children(_target) do
+  defp platform_children(:host) do
+    []
+  end
+
+  defp platform_children(:rpi3) do
     [
       # Starts a worker by calling: Controller.Worker.start_link(arg)
       # {Controller.Worker, arg},
