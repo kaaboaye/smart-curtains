@@ -7,5 +7,7 @@ defmodule ControllerWeb.Router do
 
   scope "/api", ControllerWeb do
     pipe_through(:api)
+
+    resources("/tasks", TaskController)
   end
 end

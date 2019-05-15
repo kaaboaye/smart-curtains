@@ -9,6 +9,7 @@ defmodule Controller.MixProject do
       version: "0.1.0",
       elixir: "~> 1.8",
       archives: [nerves_bootstrap: "~> 1.5"],
+      compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       build_embedded: true,
       aliases: [loadconfig: [&bootstrap/1]],
