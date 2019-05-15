@@ -24,6 +24,6 @@ defmodule Controller.Clock do
   end
 
   defp schedule_work do
-    Process.send_after(self(), :collect_orders, 100)
+    # Process.send_after(self(), :collect_orders, 100)
   end
 end

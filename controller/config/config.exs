@@ -7,8 +7,22 @@ use Mix.Config
 
 config :controller, ecto_repos: [Controller.Repo]
 
-config :controller, Controller.Repo,
-  adapter: Sqlite.Ecto2,
-  database: "database-#{Mix.target()}.sqlite3"
+config :controller, ControllerWeb.Endpoint,
+  url: [host: "localhost"],
+  secret_key_base: "xaD75htrQzhS9+xY6XxyRJDMUag4x4TZ90TPSHcUaKMaNldiWzg+72PbQHlnVCrw",
+  render_errors: [view: ControllerWeb.ErrorView, accepts: ~w(json)],
+  http: [port: 4000],
+  debug_errors: true,
+  code_reloader: true,
+  check_origin: false,
+  watchers: [],
+  pubsub: [name: Controller.PubSub, adapter: Phoenix.PubSub.PG2]
+
+config :logger, :console,
+  format: "$time $metadata[$level] $message\n",
+  metadata: [:request_id]
+
+# Use Jason for JSON parsing in Phoenix
+config :phoenix, :json_library, Jason
 
 import_config "#{Mix.target()}.exs"

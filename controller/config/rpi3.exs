@@ -59,3 +59,11 @@ config :nerves_init_gadget,
 # Import target specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 # Uncomment to use target specific configurations
+
+config :controller, Controller.Repo,
+  adapter: Sqlite.Ecto2,
+  database: "/root/#{Mix.env()}.sqlite3"
+
+config :controller, ControllerWeb.Endpoint,
+  http: [port: 80],
+  server: true

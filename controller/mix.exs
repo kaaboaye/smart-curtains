@@ -41,6 +41,12 @@ defmodule Controller.MixProject do
       {:toolshed, "~> 0.2"},
       {:nerves_firmware_ssh, "~> 0.3", targets: @all_targets},
       {:sqlite_ecto2, "~> 2.2"},
+      {:esqlite, github: "kaaboaye/esqlite", override: true},
+      {:phoenix, "~> 1.4.6"},
+      {:phoenix_pubsub, "~> 1.1"},
+      {:gettext, "~> 0.11"},
+      {:jason, "~> 1.0"},
+      {:plug_cowboy, "~> 2.0"},
 
       # Dependencies for all targets except :host
       {:nerves_runtime, "~> 0.6", targets: @all_targets},

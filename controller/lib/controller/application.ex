@@ -16,7 +16,11 @@ defmodule Controller.Application do
 
   # List all child processes to be supervised
   defp children(platform) do
-    [Controller.Repo | platform_children(platform)]
+    [
+      {Controller.Repo, []},
+      {ControllerWeb.Endpoint, []}
+      | platform_children(platform)
+    ]
   end
 
   defp platform_children(:host) do
