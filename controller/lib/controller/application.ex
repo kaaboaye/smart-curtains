@@ -28,6 +28,11 @@ defmodule Controller.Application do
   end
 
   defp platform_children(:rpi3) do
+    Task.start(fn ->
+      Process.sleep(5000)
+      Nerves.Network.status("eth0") |> IO.inspect()
+    end)
+
     [
       # Starts a worker by calling: Controller.Worker.start_link(arg)
       # {Controller.Worker, arg},

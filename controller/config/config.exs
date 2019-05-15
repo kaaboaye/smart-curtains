@@ -13,7 +13,6 @@ config :controller, ControllerWeb.Endpoint,
   render_errors: [view: ControllerWeb.ErrorView, accepts: ~w(json)],
   http: [port: 4000],
   debug_errors: true,
-  code_reloader: true,
   check_origin: false,
   watchers: [],
   pubsub: [name: Controller.PubSub, adapter: Phoenix.PubSub.PG2]
