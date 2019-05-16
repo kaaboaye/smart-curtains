@@ -12,8 +12,6 @@ defmodule ControllerWeb.TaskController do
   end
 
   def create(conn, %{"task" => task_params}) do
-    task_params = map_task(task_params)
-
     with {:ok, %Task{} = task} <- Tasks.create_task(task_params) do
       conn
       |> put_status(:created)
@@ -28,23 +26,19 @@ defmodule ControllerWeb.TaskController do
     end
   end
 
-  # def update(conn, %{"id" => id, "task" => task_params}) do
-  #   with %{} = task <- Tasks.get_task(id),
-  #        {:ok, %Task{} = task} <- Tasks.update_task(task, task_params) do
-  #     render(conn, "show.json", task: task)
-  #   end
-  # end
+  def update(conn, %{"id" => id} = attrs) do
+    with {:ok, task_params} <- Map.fetch(attrs, "task"),
+         {:ok, task} <- Tasks.update_task(id, task_params) do
+      render(conn, "show.json", task: task)
+    else
+      :error -> {:error, :bad_request}
+      err -> err
+    end
+  end
 
   def delete(conn, %{"id" => id}) do
     with :ok <- Tasks.delete_task(id) do
       send_resp(conn, :no_content, "")
     end
-  end
-
-  defp map_task(task) do
-    %{
-      scheduled_at: task["scheduledAt"],
-      desired_value: task["desiredValue"]
-    }
   end
 end
