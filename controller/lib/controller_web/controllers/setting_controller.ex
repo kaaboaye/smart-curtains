@@ -25,7 +25,6 @@ defmodule ControllerWeb.SettingController do
     with %{} = setting <- Settings.get_from_string(key) do
       render(conn, "show.json", setting: setting)
     end
-    |> IO.inspect()
   end
 
   # def update(conn, %{"id" => id, "task" => task_params}) do

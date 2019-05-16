@@ -17,7 +17,6 @@ defmodule ControllerWeb.SettingView do
   end
 
   def render("setting.json", %{setting: setting}) do
-    IO.inspect "xdd"
     %{key: setting.key, value: setting.value, updatedAt: setting.updated_at}
   end
 end

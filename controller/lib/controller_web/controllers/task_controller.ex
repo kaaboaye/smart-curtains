@@ -39,7 +39,6 @@ defmodule ControllerWeb.TaskController do
     with :ok <- Tasks.delete_task(id) do
       send_resp(conn, :no_content, "")
     end
-    |> IO.inspect
   end
 
   defp map_task(task) do
