@@ -6,11 +6,13 @@ defmodule Controller.Settings do
   import Ecto.Query, warn: false
   alias Controller.Repo
 
-  alias Controller.Settings.Setting
+  alias Controller.Settings.{Setting, SettingsEntry}
 
   def get_settings do
     list_settings()
-    |> Map.new(fn %{key: k, value: v} -> {String.to_atom(k), Map.get(v, "v")} end)
+    |> Map.new(fn e ->
+      {String.to_atom(e.key), setting_to_entry(e)}
+    end)
   end
 
   def set(key, value) do
@@ -37,12 +39,31 @@ defmodule Controller.Settings do
     end
   end
 
+  def get(key) when is_atom(key) do
+    get(Atom.to_string(key))
+  end
+
+  def get(key) do
+    with %{} = setting <- get_setting(key) do
+      setting_to_entry(setting)
+    end
+  end
+
   def del(key) do
     key = Atom.to_string(key)
 
     with %{} = setting <- get_setting(key) do
       delete_setting(setting)
     end
+  end
+
+  def setting_to_entry(setting) do
+    %SettingsEntry{
+      key: setting.key,
+      value: Map.get(setting.value, "v"),
+      inserted_at: setting.inserted_at,
+      updated_at: setting.updated_at
+    }
   end
 
   @doc """
