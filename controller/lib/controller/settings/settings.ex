@@ -18,13 +18,27 @@ defmodule Controller.Settings do
   end
 
   def set(:custom_desired_value, value) do
-    Amnesia.transaction! do
-      %Setting{
-        key: :custom_desired_value,
-        value: value,
-        updated_at: DateTime.utc_now()
-      }
-      |> Setting.write!()
+    with {:ok, value} <- Ecto.Type.cast(:float, value) do
+      setting =
+        Amnesia.transaction! do
+          %Setting{
+            key: :custom_desired_value,
+            value: value,
+            updated_at: DateTime.utc_now()
+          }
+          |> Setting.write!()
+        end
+
+      {:ok, setting}
+    else
+      :error -> {:error, :bad_request}
+    end
+  end
+
+  def set_from_string(key, value) do
+    case key do
+      "custom_desired_value" -> set(:custom_desired_value, value)
+      _ -> nil
     end
   end
 

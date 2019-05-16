@@ -9,6 +9,6 @@ defmodule ControllerWeb.Router do
     pipe_through(:api)
 
     resources("/tasks", TaskController)
-    resources("/settings", SettingController, only: [:index, :show])
+    resources("/settings", SettingController)
   end
 end
