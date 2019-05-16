@@ -11,6 +11,11 @@ defmodule ControllerWeb.TaskView do
   end
 
   def render("task.json", %{task: task}) do
-    %{id: task.id, scheduledAt: task.scheduled_at, desiredValue: task.desired_value}
+    %{
+      id: task.id,
+      scheduledAt: task.scheduled_at,
+      desiredValue: task.desired_value,
+      updatedAt: task.updated_at
+    }
   end
 end

@@ -6,7 +6,7 @@ defmodule ControllerWeb.SettingController do
   action_fallback(ControllerWeb.FallbackController)
 
   def index(conn, _params) do
-    settings = Settings.get_settings()
+    settings = Settings.get_all()
     render(conn, "index.json", settings: settings)
   end
 
@@ -22,9 +22,10 @@ defmodule ControllerWeb.SettingController do
   # end
 
   def show(conn, %{"id" => key}) do
-    with %{} = setting <- Settings.get(key) do
+    with %{} = setting <- Settings.get_from_string(key) do
       render(conn, "show.json", setting: setting)
     end
+    |> IO.inspect()
   end
 
   # def update(conn, %{"id" => id, "task" => task_params}) do
@@ -40,5 +41,4 @@ defmodule ControllerWeb.SettingController do
   #     send_resp(conn, :no_content, "")
   #   end
   # end
-
 end

@@ -2,7 +2,7 @@ defmodule ControllerWeb.TaskController do
   use ControllerWeb, :controller
 
   alias Controller.Tasks
-  alias Controller.Tasks.Task
+  alias Controller.Database.Task
 
   action_fallback(ControllerWeb.FallbackController)
 
@@ -28,18 +28,18 @@ defmodule ControllerWeb.TaskController do
     end
   end
 
-  def update(conn, %{"id" => id, "task" => task_params}) do
-    with %{} = task <- Tasks.get_task(id),
-         {:ok, %Task{} = task} <- Tasks.update_task(task, task_params) do
-      render(conn, "show.json", task: task)
-    end
-  end
+  # def update(conn, %{"id" => id, "task" => task_params}) do
+  #   with %{} = task <- Tasks.get_task(id),
+  #        {:ok, %Task{} = task} <- Tasks.update_task(task, task_params) do
+  #     render(conn, "show.json", task: task)
+  #   end
+  # end
 
   def delete(conn, %{"id" => id}) do
-    with %{} = task <- Tasks.get_task(id),
-         {:ok, %Task{}} <- Tasks.delete_task(task) do
+    with :ok <- Tasks.delete_task(id) do
       send_resp(conn, :no_content, "")
     end
+    |> IO.inspect
   end
 
   defp map_task(task) do

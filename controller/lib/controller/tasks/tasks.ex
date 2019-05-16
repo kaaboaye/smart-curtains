@@ -41,19 +41,20 @@ defmodule Controller.Tasks do
     with %{valid?: true} <- changeset do
       task = Changeset.apply_changes(changeset)
 
-      task = Amnesia.transaction! do
-        %Task{
-          id: task.id,
-          desired_value: task.desired_value,
-          scheduled_at: task.scheduled_at,
-          updated_at: task.updated_at
-        }
-        |> Task.write!()
-      end
+      task =
+        Amnesia.transaction! do
+          %Task{
+            id: task.id,
+            desired_value: task.desired_value,
+            scheduled_at: task.scheduled_at,
+            updated_at: task.updated_at
+          }
+          |> Task.write!()
+        end
 
-      Map.put(task, :id, UniqueId.to_string(task.id))
+      {:ok, Map.put(task, :id, UniqueId.to_string(task.id))}
     else
-      err -> err
+      err -> {:error, err}
     end
   end
 
@@ -62,8 +63,10 @@ defmodule Controller.Tasks do
       Amnesia.transaction do
         Task.delete(id)
       end
+
+      :ok
     else
-      :error -> {:error, :bad_data}
+      :error -> {:error, :bad_request}
     end
   end
 end
