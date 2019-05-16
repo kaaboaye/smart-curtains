@@ -21,10 +21,6 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
-config :controller, Controller.Repo,
-  adapter: Sqlite.Ecto2,
-  json_library: Jason
-
 config :phoenix, :json_library, Jason
 
 import_config "#{Mix.target()}.exs"

@@ -17,7 +17,6 @@ defmodule Controller.Application do
   # List all child processes to be supervised
   defp children(platform) do
     [
-      {Controller.Repo, []},
       {ControllerWeb.Endpoint, []}
       | platform_children(platform)
     ]

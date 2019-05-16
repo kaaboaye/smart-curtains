@@ -41,14 +41,14 @@ defmodule Controller.MixProject do
       {:ring_logger, "~> 0.6"},
       {:toolshed, "~> 0.2"},
       {:nerves_firmware_ssh, "~> 0.3", targets: @all_targets},
-      {:sqlite_ecto2, "~> 2.2"},
-      {:esqlite, github: "kaaboaye/esqlite", override: true},
       {:phoenix, "~> 1.4.6"},
       {:phoenix_pubsub, "~> 1.1"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
-      {:poison, "~> 3.0"},
       {:plug_cowboy, "~> 2.0"},
+      {:amnesia, github: "meh/amnesia", branch: "master", override: true},
+      {:exquisite, github: "meh/exquisite", branch: "master", override: true},
+      {:ecto, "~> 3.1"},
 
       # Dependencies for all targets except :host
       {:nerves_runtime, "~> 0.6", targets: @all_targets},

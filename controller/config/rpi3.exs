@@ -60,8 +60,6 @@ config :nerves_init_gadget,
 # of this file so it overrides the configuration defined above.
 # Uncomment to use target specific configurations
 
-config :controller, Controller.Repo, database: "/root/#{Mix.env()}.sqlite3"
-
 config :controller, ControllerWeb.Endpoint,
   http: [port: 80],
   server: true

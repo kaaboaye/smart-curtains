@@ -3,116 +3,67 @@ defmodule Controller.Tasks do
   The Tasks context.
   """
 
-  import Ecto.Query, warn: false
-  alias Controller.Repo
+  use Amnesia
 
-  alias Controller.Tasks.Task
+  alias Ecto.Changeset
+  alias Controller.Tasks.Task, as: EctoTask
+  alias Controller.Database.Task
+  alias Controller.UniqueId
 
-  @doc """
-  Returns the list of tasks.
-
-  ## Examples
-
-      iex> list_tasks()
-      [%Task{}, ...]
-
-  """
   def list_tasks do
-    Repo.all(Task)
+    Amnesia.transaction! do
+      Task.stream()
+      |> Stream.map(fn t ->
+        Map.put(t, :id, UniqueId.to_string(t.id))
+      end)
+      |> Enum.to_list()
+    end
   end
 
-  @doc """
-  Gets a single task.
-
-  ## Examples
-
-      iex> get_task!(123)
-      %Task{}
-
-      iex> get_task!(456)
-      nil
-
-  """
-  def get_task(id), do: Repo.get(Task, id)
-
-  @doc """
-  Gets a single task.
-
-  Raises `Ecto.NoResultsError` if the Task does not exist.
-
-  ## Examples
-
-      iex> get_task!(123)
-      %Task{}
-
-      iex> get_task!(456)
-      ** (Ecto.NoResultsError)
-
-  """
-  def get_task!(id), do: Repo.get!(Task, id)
-
-  @doc """
-  Creates a task.
-
-  ## Examples
-
-      iex> create_task(%{field: value})
-      {:ok, %Task{}}
-
-      iex> create_task(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def create_task(attrs \\ %{}) do
-    %Task{}
-    |> Task.changeset(attrs)
-    |> Repo.insert()
+  def get_task(id) do
+    with {:ok, id} <- UniqueId.to_binary(id),
+         %{} = task <- Amnesia.transaction!(do: Task.read(id)) do
+      Map.put(task, :id, UniqueId.to_string(task.id))
+    else
+      :error -> {:error, :bad_request}
+      nil -> {:error, :not_found}
+    end
   end
 
-  @doc """
-  Updates a task.
+  def create_task(attrs) do
+    changeset =
+      %EctoTask{
+        id: UniqueId.generate_id(),
+        updated_at: DateTime.utc_now()
+      }
+      |> EctoTask.changeset(attrs)
 
-  ## Examples
+    with %{valid?: true} <- changeset do
+      task = Changeset.apply_changes(changeset)
 
-      iex> update_task(task, %{field: new_value})
-      {:ok, %Task{}}
+      task = Amnesia.transaction! do
+        %Task{
+          id: task.id,
+          desired_value: task.desired_value,
+          scheduled_at: task.scheduled_at,
+          updated_at: task.updated_at
+        }
+        |> Task.write!()
+      end
 
-      iex> update_task(task, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def update_task(%Task{} = task, attrs) do
-    task
-    |> Task.changeset(attrs)
-    |> Repo.update()
+      Map.put(task, :id, UniqueId.to_string(task.id))
+    else
+      err -> err
+    end
   end
 
-  @doc """
-  Deletes a Task.
-
-  ## Examples
-
-      iex> delete_task(task)
-      {:ok, %Task{}}
-
-      iex> delete_task(task)
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def delete_task(%Task{} = task) do
-    Repo.delete(task)
-  end
-
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking task changes.
-
-  ## Examples
-
-      iex> change_task(task)
-      %Ecto.Changeset{source: %Task{}}
-
-  """
-  def change_task(%Task{} = task) do
-    Task.changeset(task, %{})
+  def delete_task(id) do
+    with {:ok, id} <- UniqueId.to_binary(id) do
+      Amnesia.transaction do
+        Task.delete(id)
+      end
+    else
+      :error -> {:error, :bad_data}
+    end
   end
 end

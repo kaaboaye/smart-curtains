@@ -1,4 +1,5 @@
 %{
+  "amnesia": {:git, "https://github.com/meh/amnesia.git", "3dc0cdcbf8af263d1d784758037ce50291fccc37", [branch: "master"]},
   "artificery": {:hex, :artificery, "0.4.1", "90b1fcedb9034853b36dbea2174f9fc1172bd50b0686a723178103def5c9c1c8", [:mix], [], "hexpm"},
   "connection": {:hex, :connection, "1.0.4", "a1cae72211f0eef17705aaededacac3eb30e6625b04a6117c1b2db6ace7d5976", [:mix], [], "hexpm"},
   "cowboy": {:hex, :cowboy, "2.6.3", "99aa50e94e685557cad82e704457336a453d4abcb77839ad22dbe71f311fcc06", [:rebar3], [{:cowlib, "~> 2.7.3", [hex: :cowlib, repo: "hexpm", optional: false]}, {:ranch, "~> 1.7.1", [hex: :ranch, repo: "hexpm", optional: false]}], "hexpm"},
@@ -7,9 +8,10 @@
   "decimal": {:hex, :decimal, "1.7.0", "30d6b52c88541f9a66637359ddf85016df9eb266170d53105f02e4a67e00c5aa", [:mix], [], "hexpm"},
   "distillery": {:hex, :distillery, "2.0.12", "6e78fe042df82610ac3fa50bd7d2d8190ad287d120d3cd1682d83a44e8b34dfb", [:mix], [{:artificery, "~> 0.2", [hex: :artificery, repo: "hexpm", optional: false]}], "hexpm"},
   "dns": {:hex, :dns, "2.1.2", "81c46d39f7934f0e73368355126e4266762cf227ba61d5889635d83b2d64a493", [:mix], [{:socket, "~> 0.3.13", [hex: :socket, repo: "hexpm", optional: false]}], "hexpm"},
-  "ecto": {:hex, :ecto, "2.2.9", "031d55df9bb430cb118e6f3026a87408d9ce9638737bda3871e5d727a3594aae", [:mix], [{:db_connection, "~> 1.1", [hex: :db_connection, repo: "hexpm", optional: true]}, {:decimal, "~> 1.2", [hex: :decimal, repo: "hexpm", optional: false]}, {:mariaex, "~> 0.8.0", [hex: :mariaex, repo: "hexpm", optional: true]}, {:poison, "~> 2.2 or ~> 3.0", [hex: :poison, repo: "hexpm", optional: true]}, {:poolboy, "~> 1.5", [hex: :poolboy, repo: "hexpm", optional: false]}, {:postgrex, "~> 0.13.0", [hex: :postgrex, repo: "hexpm", optional: true]}, {:sbroker, "~> 1.0", [hex: :sbroker, repo: "hexpm", optional: true]}], "hexpm"},
+  "ecto": {:hex, :ecto, "3.1.4", "69d852da7a9f04ede725855a35ede48d158ca11a404fe94f8b2fb3b2162cd3c9", [:mix], [{:decimal, "~> 1.6", [hex: :decimal, repo: "hexpm", optional: false]}, {:jason, "~> 1.0", [hex: :jason, repo: "hexpm", optional: true]}], "hexpm"},
   "elixir_make": {:hex, :elixir_make, "0.5.2", "96a28c79f5b8d34879cd95ebc04d2a0d678cfbbd3e74c43cb63a76adf0ee8054", [:mix], [], "hexpm"},
   "esqlite": {:git, "https://github.com/kaaboaye/esqlite.git", "d35d7a3c1408474709f5458c8a3ec03bc5f7a39e", []},
+  "exquisite": {:git, "https://github.com/meh/exquisite.git", "ff8446c9aab2dfcfcc1796849575fe86c708b6ba", [branch: "master"]},
   "gettext": {:hex, :gettext, "0.16.1", "e2130b25eebcbe02bb343b119a07ae2c7e28bd4b146c4a154da2ffb2b3507af2", [:mix], [], "hexpm"},
   "jason": {:hex, :jason, "1.1.2", "b03dedea67a99223a2eaf9f1264ce37154564de899fd3d8b9a21b1a6fd64afe7", [:mix], [{:decimal, "~> 1.0", [hex: :decimal, repo: "hexpm", optional: true]}], "hexpm"},
   "mdns": {:hex, :mdns, "1.0.2", "c8228dd44d3fdd55e9842cb7111c9145f2eeaa8b7adac75012ee0e250962215e", [:mix], [{:dns, "~> 2.0", [hex: :dns, repo: "hexpm", optional: false]}], "hexpm"},

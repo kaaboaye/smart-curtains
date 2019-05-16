@@ -2,11 +2,13 @@ defmodule Controller.Tasks.Task do
   use Ecto.Schema
   import Ecto.Changeset
 
-  schema "tasks" do
-    field :desired_value, :float
-    field :scheduled_at, :time
+  @primary_key false
+  embedded_schema do
+    field(:id, :string, primary_key: true)
+    field(:desired_value, :float)
+    field(:scheduled_at, :time)
 
-    timestamps()
+    timestamps(inserted_at: false)
   end
 
   @doc false
