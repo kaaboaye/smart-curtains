@@ -11,12 +11,15 @@ defmodule ControllerWeb.TaskController do
     render(conn, "index.json", tasks: tasks)
   end
 
-  def create(conn, %{"task" => task_params}) do
-    with {:ok, %Task{} = task} <- Tasks.create_task(task_params) do
+  def create(conn, attrs) do
+    with {:ok, task_params} = Map.fetch(attrs, "task"),
+         {:ok, %Task{} = task} <- Tasks.create_task(task_params) do
       conn
       |> put_status(:created)
       |> put_resp_header("location", Routes.task_path(conn, :show, task))
       |> render("show.json", task: task)
+    else
+      :error -> {:error, :bad_request}
     end
   end
 
