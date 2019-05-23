@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <router-view/>
+    <router-view />
     <Navigation></Navigation>
   </div>
 </template>
@@ -62,5 +62,3 @@ a {
   color: white;
 }*/
 </style>
-
-

@@ -1,15 +1,11 @@
 <template>
-    <div class='View'>
-        <h1>View</h1>
-    </div>
+  <div class="View">
+    <h1>View</h1>
+  </div>
 </template>
 
 <script>
-export default {
-
-}
+export default {};
 </script>
 
-<style>
-
-</style>
+<style></style>

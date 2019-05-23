@@ -2,13 +2,13 @@
   <nav class="nav">
     <router-link to="/">
       <button class="nav__button">
-        <img src="../assets/sunny.svg">
+        <img src="../assets/sunny.svg" />
         <span class="nav__link">Current setting</span>
       </button>
     </router-link>
     <router-link to="/schedule">
       <button class="nav__button">
-        <img src="../assets/schedule.svg">
+        <img src="../assets/schedule.svg" />
         <span class="nav__link">Schedule</span>
       </button>
     </router-link>

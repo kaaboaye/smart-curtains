@@ -25,5 +25,4 @@ export default {
 .about p{
   padding: 20px;
 }*/
-
 </style>
