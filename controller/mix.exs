@@ -54,6 +54,9 @@ defmodule Controller.MixProject do
       {:nerves_runtime, "~> 0.6", targets: @all_targets},
       {:nerves_init_gadget, "~> 0.4", targets: @all_targets},
 
+      {:circuits_gpio, "~> 0.1", targets: @all_targets},
+      {:elixir_ale, "~> 1.2", targets: @all_targets},
+
       # Dependencies for specific targets
       {:nerves_system_rpi, "~> 1.6", runtime: false, targets: :rpi},
       {:nerves_system_rpi0, "~> 1.6", runtime: false, targets: :rpi0},

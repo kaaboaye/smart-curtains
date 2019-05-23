@@ -13,10 +13,6 @@ defmodule ControllerWeb.FallbackController do
     |> render("error.json", changeset: changeset)
   end
 
-  def call(conn, nil) do
-    call(conn, {:error, :not_found})
-  end
-
   def call(conn, {:error, :not_found}) do
     conn
     |> put_status(:not_found)

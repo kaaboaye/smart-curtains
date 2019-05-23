@@ -1,0 +1,22 @@
+language: node_js
+node_js: "10.15.1"
+
+install:
+  - cd frontend && npm i && cd ..
+
+script:
+  - cd frontend && npm run build && cd ..
+
+cache:
+  directories:
+    - frontend/node_modules
+
+deploy:
+  repo: kaaboaye/smart-curtains-release
+  local-dir: frontend/dist
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN
+  fqdn: sc.wrrr.dev
+  on:
+    branch: master

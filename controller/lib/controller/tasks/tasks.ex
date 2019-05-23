@@ -43,18 +43,36 @@ defmodule Controller.Tasks do
 
       task =
         Amnesia.transaction! do
-          %Task{
-            id: task.id,
-            desired_value: task.desired_value,
-            scheduled_at: task.scheduled_at,
-            updated_at: task.updated_at
-          }
+          task
+          |> from_ecto_task()
           |> Task.write!()
         end
 
       {:ok, Map.put(task, :id, UniqueId.to_string(task.id))}
     else
       err -> {:error, err}
+    end
+  end
+
+  def update_task(id, attrs) do
+    with %{} = task <- get_task(id),
+         task <- to_ecto_task(task),
+         %{valid?: true} = changeset <- EctoTask.changeset(task, attrs),
+         task <- Changeset.apply_changes(changeset) do
+      task =
+        Amnesia.transaction! do
+          task = from_ecto_task(task)
+          task = Map.put(task, :id, UniqueId.to_binary!(task.id))
+
+          Task.write!(task)
+        end
+
+      task = Map.put(task, :id, UniqueId.to_string(task.id))
+
+      {:ok, task}
+    else
+      %Changeset{} = changeset -> {:error, changeset}
+      nil -> {:error, :not_found}
     end
   end
 
@@ -68,5 +86,22 @@ defmodule Controller.Tasks do
     else
       :error -> {:error, :bad_request}
     end
+  end
+
+  def to_ecto_task(task) do
+    %EctoTask{}
+    |> EctoTask.changeset(task |> Map.from_struct())
+    |> Changeset.apply_changes()
+    |> Map.put(:id, task.id)
+    |> Map.put(:updated_at, task.updated_at)
+  end
+
+  defp from_ecto_task(task) do
+    %Task{
+      id: task.id,
+      desired_value: task.desired_value,
+      scheduled_at: task.scheduled_at,
+      updated_at: task.updated_at
+    }
   end
 end

@@ -17,6 +17,6 @@ defmodule ControllerWeb.SettingView do
   end
 
   def render("setting.json", %{setting: setting}) do
-    %{key: setting.key, value: setting.value, updatedAt: setting.updated_at}
+    %{key: setting.key, value: setting.value, updated_at: setting.updated_at}
   end
 end

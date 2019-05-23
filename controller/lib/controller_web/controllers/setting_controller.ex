@@ -27,12 +27,14 @@ defmodule ControllerWeb.SettingController do
     end
   end
 
-  # def update(conn, %{"id" => id, "task" => task_params}) do
-  #   with %{} = task <- Tasks.get_task(id),
-  #        {:ok, %Task{} = task} <- Tasks.update_task(task, task_params) do
-  #     render(conn, "show.json", task: task)
-  #   end
-  # end
+  def update(conn, %{"id" => key} = attrs) do
+    with {:ok, value} <- Map.fetch(attrs, "value"),
+         {:ok, setting} <- Settings.set_from_string(key, value) do
+      render(conn, "show.json", setting: setting)
+    else
+      :error -> {:error, :bad_request}
+    end
+  end
 
   # def delete(conn, %{"id" => id}) do
   #   with %{} = task <- Tasks.get_task(id),
