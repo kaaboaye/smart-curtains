@@ -79,9 +79,9 @@ defmodule ControllerWeb.TaskControllerTest do
       conn = delete(conn, Routes.task_path(conn, :delete, task))
       assert response(conn, 204)
 
-      assert_error_sent 404, fn ->
+      assert_error_sent(404, fn ->
         get(conn, Routes.task_path(conn, :show, task))
-      end
+      end)
     end
   end
 
