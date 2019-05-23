@@ -1,15 +1,15 @@
 <template>
   <nav class="nav">
-    <router-link to="/">
+    <router-link :to="{name: 'home'}">
       <button class="nav__button">
-        <img src="../assets/sunny.svg" />
+        <img src="../assets/sunny.svg">
         <span class="nav__link">Current setting</span>
       </button>
     </router-link>
-    <router-link to="/schedule">
+    <router-link :to="{name: 'tasks'}">
       <button class="nav__button">
-        <img src="../assets/schedule.svg" />
-        <span class="nav__link">Schedule</span>
+        <img src="../assets/schedule.svg">
+        <span class="nav__link">Tasks</span>
       </button>
     </router-link>
   </nav>

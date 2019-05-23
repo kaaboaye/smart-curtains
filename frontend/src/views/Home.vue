@@ -1,12 +1,6 @@
 <template>
   <div class="slider-container">
-    <vue-slider
-      v-model="value"
-      direction="ttb"
-      :height="400"
-      :width="50"
-      v-on:change="dupa"
-    />
+    <vue-slider v-model="value" direction="ttb" :height="400" :width="50"/>
   </div>
 </template>
 
@@ -18,11 +12,7 @@ export default {
   components: {
     VueSlider
   },
-  methods: {
-    dupa: function(e) {
-      console.log("dupa", e);
-    }
-  },
+
   data() {
     return {
       value: 0
