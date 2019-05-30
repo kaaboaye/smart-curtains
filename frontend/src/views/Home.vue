@@ -22,15 +22,9 @@ export default {
 </script>
 
 <style>
-.slider-container {
-  margin-top: auto;
-  margin-bottom: auto;
-  display: flex;
-  justify-content: center;
-}
-
 .vue-slider-rail {
-  background: #fff;
+  background: white;
+  background-image: linear-gradient(#ffc107, #7d8a73, #607d8b);
 }
 
 .vue-slider-dot {
@@ -41,5 +35,6 @@ export default {
 .vue-slider-dot-handle {
   border-radius: 0;
   background: #03a9f4;
+  outline: none;
 }
 </style>
