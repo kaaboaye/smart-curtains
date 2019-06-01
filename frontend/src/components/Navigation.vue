@@ -24,9 +24,12 @@ export default {
 <style>
 .nav {
   padding-top: 5px;
+  position: absolute;
+  bottom: 0;
   display: flex;
   justify-content: space-evenly;
   border-top: 1px solid #707070;
+  width: 100%;
 }
 .nav__button {
   text-decoration: none;

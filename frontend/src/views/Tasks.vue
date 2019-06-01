@@ -16,10 +16,9 @@ export default {
   data: function() {
     return {
       tasks: {
-        key1: "Please",
-        key2: "Say",
-        key3: "That my app",
-        key4: "Is really, really nice"
+        key1: "7:30 - 0%",
+        key2: "18:00 - 40%",
+        key3: "22:00 - 100%"
       }
     };
   }

@@ -61,4 +61,10 @@ export default {
   background: #03a9f4;
   outline: none;
 }
+
+.timer.container {
+  display: flex;
+  position: relative;
+}
+
 </style>
