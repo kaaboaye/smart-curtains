@@ -1,6 +1,6 @@
 <template>
   <div class="slider-container">
-    <vue-slider v-model="value" direction="ttb" :height="400" :width="50"/>
+    <vue-slider v-model="value" direction="ttb" :height="300" :width="50"/>
   </div>
 </template>
 

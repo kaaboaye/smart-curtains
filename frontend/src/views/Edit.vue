@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div class="slider-container">
-      <vue-slider v-model="value" direction="ttb" :height="400" :width="50"/>
-    </div>
     <div class="timer-container">
-      <timeselector v-model="time"></timeselector>
+      <timeselector class="tS" v-model="time"></timeselector>
+    </div>
+    <div class="slider-container">
+      <vue-slider v-model="value" direction="ttb" :height="300" :width="50"/>
     </div>
   </div>
 </template>
@@ -35,7 +35,7 @@ export default {
 }
 
 .content-wrapper {
-  height: 90vh;
+  height: 70vh;
 }
 
 .slider-container {
@@ -44,6 +44,7 @@ export default {
   margin-bottom: auto;
   display: flex;
   justify-content: center;
+  position: relative;
 }
 
 .vue-slider-rail {
@@ -65,6 +66,11 @@ export default {
 .timer.container {
   display: flex;
   position: relative;
+  bottom: 10px;
 }
 
+.tS {
+  color: black;
+  margin-top: 10px;
+}
 </style>
