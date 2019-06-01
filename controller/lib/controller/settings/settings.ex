@@ -52,4 +52,29 @@ defmodule Controller.Settings do
       _ -> nil
     end
   end
+
+  def get_current_desired_value do
+    custom = get(:custom_desired_value)
+
+    {current_task, _} =
+      Controller.Tasks.list_tasks()
+      |> Enum.map(fn t ->
+        diff = DateTime.diff(DateTime.utc_now(), time_to_datetime(t.scheduled_at))
+        {t, diff}
+      end)
+      |> Enum.filter(fn {_, diff} -> diff >= 0 end)
+      |> Enum.min_by(fn {_, diff} -> diff end)
+
+    if DateTime.diff(custom.updated_at, time_to_datetime(current_task.scheduled_at)) >= 0,
+      do: custom.value,
+      else: current_task.desired_value
+  end
+
+  defp time_to_datetime(time) do
+    DateTime.utc_now()
+    |> Map.put(:hour, time.hour)
+    |> Map.put(:minute, time.minute)
+    |> Map.put(:second, time.second)
+    |> Map.put(:microsecond, time.microsecond)
+  end
 end
