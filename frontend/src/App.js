@@ -112,7 +112,7 @@ class App extends React.Component {
               (() => {
                 this.setState({
                   tasks: this.state.tasks.filter(
-                    ({}, taskIndex) => taskIndex !== this.state.taskIndex
+                    (_, taskIndex) => taskIndex !== this.state.taskIndex
                   ),
                   currentRoute: "SCHEDULE"
                 });

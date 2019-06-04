@@ -5,17 +5,17 @@ import sunny from "./images/sunny.svg";
 
 export const Navigation = ({ onSunnyClick, onClockClick }) => (
   <div className="nav">
-    <a onClick={onSunnyClick}>
+    <span onClick={onSunnyClick}>
       <button className="nav__button">
-        <img src={schedule} />
+        <img src={schedule} alt="schedule" />
         <span className="nav__link">Current setting</span>
       </button>
-    </a>
-    <a onClick={onClockClick}>
+    </span>
+    <span onClick={onClockClick}>
       <button className="nav__button">
-        <img src={sunny} />
+        <img src={sunny} alt="sunny" />
         <span className="nav__link">Schedule</span>
       </button>
-    </a>
+    </span>
   </div>
 );
