@@ -1,0 +1,10 @@
+.schedule--wrapper {
+  font-size: 40px;
+  margin-top: 40px;
+}
+
+.task {
+  border-top: 1px solid #707070;
+  border-bottom: 1px solid #707070;
+  cursor: pointer;
+}

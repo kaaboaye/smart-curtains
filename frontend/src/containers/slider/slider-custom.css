@@ -1,0 +1,20 @@
+.rangeslider-vertical {
+  height: 300px;
+  max-width: 50px;
+  background: linear-gradient(#ffc107, #7d8a73, #607d8b);
+  border-radius: 20px;
+  overflow: hidden;
+  margin-top: auto;
+}
+
+.rangeslider-vertical .rangeslider__handle {
+  width: 50px;
+  height: 15px;
+  left: -1px;
+  box-shadow: none;
+  background: #03a9f4;
+}
+
+.rangeslider-vertical .rangeslider__fill {
+  background: transparent;
+}

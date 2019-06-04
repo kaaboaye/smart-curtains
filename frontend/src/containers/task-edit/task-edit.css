@@ -1,0 +1,37 @@
+.button {
+  padding: 10px;
+  color: #fff;
+  outline: 0;
+  border: 0;
+  width: 50%;
+}
+
+.button--delete {
+  background: #f44336;
+}
+
+.button--save {
+  background: #ffc107;
+}
+
+.rc-time-picker-input {
+  font-size: 40px;
+  background: transparent;
+  color: #fff;
+  border: 0;
+  padding: 14px 10px;
+  height: 45px;
+  text-align: center;
+}
+
+.rc-time-picker-clear-icon {
+  display: none;
+}
+
+.task-edit-wrapper {
+  margin-top: auto;
+}
+
+.task-edit {
+  margin-bottom: 20px;
+}
