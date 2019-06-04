@@ -13,7 +13,7 @@ cache:
 
 deploy:
   repo: kaaboaye/smart-curtains-release
-  local-dir: frontend/dist
+  local-dir: frontend/build
   provider: pages
   skip-cleanup: true
   github-token: $GITHUB_TOKEN
