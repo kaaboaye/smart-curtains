@@ -1,5 +1,6 @@
 import React from "react";
 import moment from "moment";
+import axios from "axios";
 
 import { Navigation } from "./containers/nav/Nav";
 
@@ -8,6 +9,27 @@ import { Slider } from "./containers/slider/Slider";
 import { Schedule } from "./containers/schedule/schedule";
 import { TaskEdit } from "./containers/task-edit/task-edit";
 
+function getCurrentState() {
+  return axios
+    .get("/api/settings/custom_desired_value")
+    .then(r => r.data.data.value)
+    .catch(console.log);
+}
+
+function getTasks() {
+  return axios
+    .get("/api/tasks")
+    .then(r => r.data.data)
+    .catch(console.log);
+}
+
+function updateCurrentSetting(value) {
+  return axios
+    .patch("/api/settings/custom_desired_value", { value })
+    .then(r => r.data.data.value)
+    .catch(console.log);
+}
+
 class App extends React.Component {
   state = {
     currentRoute: "HOME",
@@ -15,65 +37,32 @@ class App extends React.Component {
     taskIndex: 0,
     // kinda dumb way to handle not sending the same value twice if user fe. clicks on the slider
     lastSentSetting: 0,
-    tasks: [
-      {
-        time: moment("04:04", "HH:mm"),
-        value: 0
-      },
-      {
-        time: moment("05:05", "HH:mm"),
-        value: 0
-      },
-      {
-        time: moment("06:06", "HH:mm"),
-        value: 0
-      },
-      {
-        time: moment("07:07", "HH:mm"),
-        value: 0
-      },
-      {
-        time: moment("08:08", "HH:mm"),
-        value: 0
-      }
-    ]
+    tasks: []
   };
 
   // Up for you to implement
   // Sets the state to whatever you get from the backend
-  // componentDidMount() {
-  //   fetch("backend/get_state")
-  //     .then(res => res.json)
-  //     .then(res => {
-  //       // look up the response if needed
-  //       console.log(res)
-  //       this.setState({
-  //         tasks: res.tasks
-  //       });
-  //     });
-  // }
+  componentDidMount() {
+    getCurrentState().then(value => this.setState({ currentSetting: value }));
 
-  sendUpdatedSchedule = () => {
-    console.log(
-      "here should go the request with",
-      this.state.tasks.map(task => ({
-        time: task.time.format("HH:mm"),
-        value: task.value
-      }))
+    getTasks().then(tasks =>
+      this.setState({
+        tasks: tasks.map(t => ({
+          id: t.id,
+          value: t.desired_value,
+          time: moment(t.scheduled_at, "HH:mm")
+        }))
+      })
     );
-  };
+  }
 
   sendUpdatedCurrentSetting = () => {
     if (this.state.lastSentSetting !== this.state.currentSetting) {
-      this.setState(
-        {
-          lastSentSetting: this.state.currentSetting
-        },
-        () =>
-          console.log(
-            "here should go the request with",
-            this.state.currentSetting
-          )
+      updateCurrentSetting(this.state.currentSetting).then(setting =>
+        this.setState({
+          currentSetting: setting,
+          lastSentSetting: setting
+        })
       );
     }
   };
@@ -108,17 +97,14 @@ class App extends React.Component {
         {this.state.currentRoute === "TASK_EDIT" && (
           <TaskEdit
             task={this.state.tasks[this.state.taskIndex]}
-            onDelete={
-              (() => {
-                this.setState({
-                  tasks: this.state.tasks.filter(
-                    (_, taskIndex) => taskIndex !== this.state.taskIndex
-                  ),
-                  currentRoute: "SCHEDULE"
-                });
-              },
-              () => this.sendUpdatedSchedule())
-            }
+            onDelete={() => {
+              this.setState({
+                tasks: this.state.tasks.filter(
+                  (_, taskIndex) => taskIndex !== this.state.taskIndex
+                ),
+                currentRoute: "SCHEDULE"
+              });
+            }}
             onSave={newTaskValues => {
               this.setState(
                 {
