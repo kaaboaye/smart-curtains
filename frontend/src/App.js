@@ -9,32 +9,51 @@ import { Slider } from "./containers/slider/Slider";
 import { Schedule } from "./containers/schedule/schedule";
 import { TaskEdit } from "./containers/task-edit/task-edit";
 
+function url(path) {
+  return `http://nerves.local/api${path}`;
+}
+
 function getCurrentState() {
   return axios
-    .get("/api/settings/custom_desired_value")
+    .get(url("/settings/custom_desired_value"))
     .then(r => r.data.data.value)
     .catch(console.log);
 }
 
 function getTasks() {
   return axios
-    .get("/api/tasks")
+    .get(url("/tasks"))
     .then(r => r.data.data)
     .catch(console.log);
 }
 
 function updateCurrentSetting(value) {
   return axios
-    .patch("/api/settings/custom_desired_value", { value })
+    .patch(url("/settings/custom_desired_value", { value }))
     .then(r => r.data.data.value)
     .catch(console.log);
+}
+
+function updateTask(id, task) {
+  return axios
+    .patch(url(`/tasks/${id}`, task))
+    .then(({ data: { data: t } }) => ({
+      id: t.id,
+      value: t.desired_value,
+      time: moment(t.scheduled_at, "HH:mm")
+    }))
+    .catch(console.log);
+}
+
+function deleteTask(id) {
+  return axios.delete(url(`/api/tasks/${id}`));
 }
 
 class App extends React.Component {
   state = {
     currentRoute: "HOME",
     currentSetting: 0,
-    taskIndex: 0,
+    taskId: "null",
     // kinda dumb way to handle not sending the same value twice if user fe. clicks on the slider
     lastSentSetting: 0,
     tasks: []
@@ -86,41 +105,43 @@ class App extends React.Component {
         {this.state.currentRoute === "SCHEDULE" && (
           <Schedule
             tasks={this.state.tasks}
-            onClick={index =>
+            onClick={({ id: taskId }) =>
               this.setState({
                 currentRoute: "TASK_EDIT",
-                taskIndex: index
+                taskId
               })
             }
           />
         )}
-        {this.state.currentRoute === "TASK_EDIT" && (
-          <TaskEdit
-            task={this.state.tasks[this.state.taskIndex]}
-            onDelete={() => {
-              this.setState({
-                tasks: this.state.tasks.filter(
-                  (_, taskIndex) => taskIndex !== this.state.taskIndex
-                ),
-                currentRoute: "SCHEDULE"
-              });
-            }}
-            onSave={newTaskValues => {
-              this.setState(
-                {
-                  currentRoute: "SCHEDULE",
-                  tasks: this.state.tasks.map((task, taskIndex) => {
-                    if (taskIndex === this.state.taskIndex) {
-                      return newTaskValues;
-                    }
-                    return task;
+        {console.log(this.state.taskId) ||
+          (this.state.currentRoute === "TASK_EDIT" && (
+            <TaskEdit
+              task={this.state.tasks.find(t => t.id === this.state.taskId)}
+              onDelete={() =>
+                deleteTask(this.state.taskId).then(() =>
+                  this.setState({
+                    tasks: this.state.tasks.filter(
+                      t => t.id !== this.state.taskId
+                    ),
+                    currentRoute: "SCHEDULE"
                   })
-                },
-                () => this.sendUpdatedSchedule()
-              );
-            }}
-          />
-        )}
+                )
+              }
+              onSave={updatedTask =>
+                updateTask(this.state.taskId, updatedTask).then(task =>
+                  this.setState({
+                    currentRoute: "SCHEDULE",
+                    tasks: this.state.tasks.map(t => {
+                      if (t.id === this.state.taskId) {
+                        return task;
+                      }
+                      return t;
+                    })
+                  })
+                )
+              }
+            />
+          ))}
         <Navigation
           min={0}
           max={100}

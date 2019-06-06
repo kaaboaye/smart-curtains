@@ -2,14 +2,16 @@ defmodule Controller.Clock do
   use GenServer
   require Logger
 
-  @light_sensor Controller.Clock.Mocks.LightSensor
-  @motor Controller.Clock.Mocks.Motor
+  @light_sensor ControllerRpi3.LightSensor
+  @motor ControllerRpi3.Motor
+  # @light_sensor Controller.Clock.Mocks.LightSensor
+  # @motor Controller.Clock.Mocks.Motor
 
   def do_job({:continue, light_sensor, motor}) do
     alias Controller.Settings
 
     {:ok, light} = @light_sensor.read(light_sensor)
-    direction = @motor.state(motor)
+    # direction = @motor.state(motor)
 
     desired = Settings.get_current_desired_value()
 
@@ -20,7 +22,7 @@ defmodule Controller.Clock do
         light - desired < -20 -> @motor.go(motor, :right)
       end
 
-    Logger.debug("MOTOR: #{direction} LIGHT: #{light} DESIRED: #{desired}")
+    Logger.debug("MOTOR LIGHT: #{light} DESIRED: #{desired}")
   end
 
   def stop(pid) do
