@@ -23,7 +23,11 @@ defmodule Controller.Application do
   end
 
   defp platform_children(:host) do
-    []
+    [
+      {Controller.Clock.Mocks.LightSensor, []},
+      {Controller.Clock.Mocks.Motor, []},
+      {Controller.Clock, []}
+    ]
   end
 
   defp platform_children(:rpi3) do
@@ -51,14 +55,18 @@ defmodule Controller.Application do
     end)
 
     Task.start(fn ->
-      Process.sleep(3000)
       Controller.Database.create()
       Controller.Settings.set(:custom_desired_value, 100)
+      Controller.Settings.set(:enable, true)
     end)
 
     [
       # Starts a worker by calling: Controller.Worker.start_link(arg)
       # {Controller.Worker, arg},
+
+      {ControllerRpi3.LightSensor, []},
+      {ControllerRpi3.Motor, []},
+      {Controller.Clock, []}
     ]
   end
 end

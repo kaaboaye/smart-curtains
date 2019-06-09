@@ -1,7 +1,8 @@
 defmodule Controller.Clock.Mocks.Motor do
+  use Agent
+
   def start_link(_opts \\ []) do
-    {:ok, _state} = Agent.start_link(fn -> :stop end, name: __MODULE__)
-    {:ok, :mock_motor_pid}
+    Agent.start_link(fn -> :stop end, name: __MODULE__)
   end
 
   def direction(:stop) do

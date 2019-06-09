@@ -5,21 +5,19 @@ defmodule ControllerWeb.SettingController do
 
   action_fallback(ControllerWeb.FallbackController)
 
+  defp get_light_reading do
+    value = with {:ok, value} <- Controller.Clock.LightSensor.read(), do: value, else: (_ -> nil)
+    %{key: "light_reading", updated_at: DateTime.utc_now(), value: value}
+  end
+
   def index(conn, _params) do
-    settings = Settings.get_all()
+    settings = Settings.get_all() |> Map.put(:light_reading, get_light_reading())
     render(conn, "index.json", settings: settings)
   end
 
-  # def create(conn, %{"task" => task_params}) do
-  #   task_params = map_task(task_params)
-
-  #   with {:ok, %Task{} = task} <- Tasks.create_task(task_params) do
-  #     conn
-  #     |> put_status(:created)
-  #     |> put_resp_header("location", Routes.task_path(conn, :show, task))
-  #     |> render("show.json", task: task)
-  #   end
-  # end
+  def show(conn, %{"id" => "light_reading"}) do
+    render(conn, "show.json", setting: get_light_reading())
+  end
 
   def show(conn, %{"id" => key}) do
     with %{} = setting <- Settings.get_from_string(key) do
@@ -36,11 +34,4 @@ defmodule ControllerWeb.SettingController do
       nil -> {:error, :not_found}
     end
   end
-
-  # def delete(conn, %{"id" => id}) do
-  #   with %{} = task <- Tasks.get_task(id),
-  #        {:ok, %Task{}} <- Tasks.delete_task(task) do
-  #     send_resp(conn, :no_content, "")
-  #   end
-  # end
 end

@@ -55,16 +55,17 @@ if Code.ensure_loaded?(ElixirALE.I2C) do
           0
         end
 
-      {b, m} =
-        cond do
-          ratio >= 0 && ratio <= 0x009A -> {0x2148, 0x3D71}
-          ratio <= 0x00C3 -> {0x2A37, 0x5B30}
-          ratio <= 0x00E6 -> {0x18EF, 0x2DB9}
-          ratio <= 0x0114 -> {0x0FDF, 0x199A}
-          ratio > 0x0114 -> {0x0000, 0x0000}
-        end
-
-      lux = (ch0 * b - ch1 * m + 32768) >>> 16
+      lux =
+        with {b, m} <-
+               (cond do
+                  ratio >= 0 && ratio <= 0x009A -> {0x2148, 0x3D71}
+                  ratio <= 0x00C3 -> {0x2A37, 0x5B30}
+                  ratio <= 0x00E6 -> {0x18EF, 0x2DB9}
+                  ratio <= 0x0114 -> {0x0FDF, 0x199A}
+                  # a lot of lumens
+                  ratio > 0x0114 -> 1000
+                end),
+             do: (ch0 * b - ch1 * m + 32768) >>> 16
 
       {:reply, {:ok, lux}, state}
     end

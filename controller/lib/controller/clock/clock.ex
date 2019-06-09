@@ -2,33 +2,28 @@ defmodule Controller.Clock do
   use GenServer
   require Logger
 
-  case Mix.target() do
-    :host ->
-      @light_sensor Controller.Clock.Mocks.LightSensor
-      @motor Controller.Clock.Mocks.Motor
-
-    :rpi3 ->
-      @light_sensor ControllerRpi3.LightSensor
-      @motor ControllerRpi3.Motor
-  end
+  alias Controller.Clock.LightSensor
+  alias Controller.Clock.Motor
 
   def do_job do
     alias Controller.Settings
 
-    with {:ok, light} <- @light_sensor.read() do
-      desired = Settings.get_current_desired_value()
-      direction = @motor.direction()
+    if Settings.get(:enable).value do
+      with {:ok, light} <- LightSensor.read() do
+        desired = Settings.get_current_desired_value()
+        direction = Motor.direction()
 
-      :ok =
-        cond do
-          Kernel.abs(light - desired) <= 20 -> @motor.direction(:stop)
-          light - desired > 20 -> @motor.direction(:left)
-          light - desired < -20 -> @motor.direction(:right)
-        end
+        :ok =
+          cond do
+            Kernel.abs(light - desired) <= 20 -> Motor.direction(:stop)
+            light - desired > 20 -> Motor.direction(:left)
+            light - desired < -20 -> Motor.direction(:right)
+          end
 
-      Logger.info("MOTOR: #{direction} LIGHT: #{light} DESIRED: #{desired}")
-    else
-      _ -> Logger.info("light sensor not ready")
+        IO.puts("MOTOR: #{direction} LIGHT: #{light} DESIRED: #{desired}")
+      else
+        _ -> Logger.info("light sensor not ready")
+      end
     end
   end
 
