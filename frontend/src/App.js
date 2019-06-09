@@ -6,6 +6,7 @@ import { Navigation } from "./containers/nav/Nav";
 import "./App.css";
 import {
   getCurrentState,
+  createTask,
   getTasks,
   getLightReading,
   updateCurrentSetting,
@@ -32,8 +33,11 @@ class App extends React.Component {
   componentDidMount() {
     getCurrentState().then(value => this.setState({ currentSetting: value }));
     this.updateLightReading();
+    this.getTasks();
+  }
 
-    getTasks().then(tasks =>
+  getTasks = () => {
+    return getTasks().then(tasks =>
       this.setState({
         tasks: tasks.map(t => ({
           id: t.id,
@@ -42,7 +46,7 @@ class App extends React.Component {
         }))
       })
     );
-  }
+  };
 
   updateLightReading = () => {
     getLightReading().then(light => {
@@ -90,6 +94,16 @@ class App extends React.Component {
                 taskId
               })
             }
+            onCreate={() => {
+              createTask().then(({ id: taskId }) =>
+                this.getTasks().then(() =>
+                  this.setState({
+                    currentRoute: "TASK_EDIT",
+                    taskId
+                  })
+                )
+              );
+            }}
           />
         )}
         {this.state.currentRoute === "TASK_EDIT" && (

@@ -25,6 +25,15 @@ export function getLightReading() {
     .catch(console.log);
 }
 
+export function createTask() {
+  return axios
+    .post(url("/tasks"), {
+      task: { scheduled_at: "12:00:00", desired_value: 50 }
+    })
+    .then(({ data: { data: task } }) => task)
+    .catch(console.log);
+}
+
 export function getTasks() {
   return axios
     .get(url("/tasks"))
@@ -51,5 +60,5 @@ export function updateTask(id, task) {
 }
 
 export function deleteTask(id) {
-  return axios.delete(url(`/api/tasks/${id}`));
+  return axios.delete(url(`/tasks/${id}`));
 }
