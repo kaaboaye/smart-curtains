@@ -43,8 +43,8 @@ export class TaskEdit extends React.Component {
         <button
           onClick={() =>
             this.props.onSave({
-              time: this.state.selectedTime,
-              value: this.state.value
+              scheduled_at: this.state.selectedTime.format("HH:mm:ss"),
+              desired_value: this.state.value
             })
           }
           className="button button--save"

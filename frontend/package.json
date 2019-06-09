@@ -35,5 +35,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://172.20.10.12/"
+  "proxy": "http://0:4000/"
 }

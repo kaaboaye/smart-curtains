@@ -41,7 +41,7 @@ defmodule Controller.Tasks do
       Map.put(task, :id, UniqueId.to_string(task.id))
     else
       :error -> {:error, :bad_request}
-      nil -> {:error, :not_found}
+      nil -> nil
     end
   end
 

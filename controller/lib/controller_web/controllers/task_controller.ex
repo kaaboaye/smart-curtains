@@ -26,6 +26,8 @@ defmodule ControllerWeb.TaskController do
   def show(conn, %{"id" => id}) do
     with %{} = task <- Tasks.get_task(id) do
       render(conn, "show.json", task: task)
+    else
+      nil -> {:error, :not_found}
     end
   end
 

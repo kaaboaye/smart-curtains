@@ -28,8 +28,6 @@ function getTasks() {
 }
 
 function updateCurrentSetting(value) {
-  console.log(value);
-
   return axios
     .patch(url("/settings/custom_desired_value"), { value })
     .then(r => r.data.data.value)
@@ -38,7 +36,7 @@ function updateCurrentSetting(value) {
 
 function updateTask(id, task) {
   return axios
-    .patch(url(`/tasks/${id}`, task))
+    .patch(url(`/tasks/${id}`), task)
     .then(({ data: { data: t } }) => ({
       id: t.id,
       value: t.desired_value,
@@ -115,35 +113,34 @@ class App extends React.Component {
             }
           />
         )}
-        {console.log(this.state.taskId) ||
-          (this.state.currentRoute === "TASK_EDIT" && (
-            <TaskEdit
-              task={this.state.tasks.find(t => t.id === this.state.taskId)}
-              onDelete={() =>
-                deleteTask(this.state.taskId).then(() =>
-                  this.setState({
-                    tasks: this.state.tasks.filter(
-                      t => t.id !== this.state.taskId
-                    ),
-                    currentRoute: "SCHEDULE"
+        {this.state.currentRoute === "TASK_EDIT" && (
+          <TaskEdit
+            task={this.state.tasks.find(t => t.id === this.state.taskId)}
+            onDelete={() =>
+              deleteTask(this.state.taskId).then(() =>
+                this.setState({
+                  tasks: this.state.tasks.filter(
+                    t => t.id !== this.state.taskId
+                  ),
+                  currentRoute: "SCHEDULE"
+                })
+              )
+            }
+            onSave={updatedTask => {
+              updateTask(this.state.taskId, { task: updatedTask }).then(task =>
+                this.setState({
+                  currentRoute: "SCHEDULE",
+                  tasks: this.state.tasks.map(t => {
+                    if (t.id === this.state.taskId) {
+                      return task;
+                    }
+                    return t;
                   })
-                )
-              }
-              onSave={updatedTask =>
-                updateTask(this.state.taskId, updatedTask).then(task =>
-                  this.setState({
-                    currentRoute: "SCHEDULE",
-                    tasks: this.state.tasks.map(t => {
-                      if (t.id === this.state.taskId) {
-                        return task;
-                      }
-                      return t;
-                    })
-                  })
-                )
-              }
-            />
-          ))}
+                })
+              );
+            }}
+          />
+        )}
         <Navigation
           min={0}
           max={100}
