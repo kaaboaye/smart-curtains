@@ -34,3 +34,10 @@ a {
   display: flex;
   flex-direction: column;
 }
+
+html,
+body {
+  overflow: hidden;
+
+  position: fixed;
+}
