@@ -3,24 +3,24 @@ if Code.ensure_loaded?(ElixirALE.I2C) do
     use GenServer
     alias ElixirALE.I2C
 
-    def read(pid) do
-      GenServer.call(pid, :read)
+    def read do
+      GenServer.call(__MODULE__, :read)
     end
 
     def start_link(_opts \\ []) do
-      GenServer.start_link(__MODULE__, [])
+      GenServer.start_link(__MODULE__, [], name: __MODULE__)
     end
 
     def init(_) do
-      Process.send(self(), :__power_on__, [])
-      {:ok, {self(), :not_ready, :powering_on}}
+      Process.send(__MODULE__, :__power_on__, [])
+      {:ok, :powering_on}
     end
 
-    def handle_info(:__power_on__, {this, :not_ready, :powering_on}) do
+    def handle_info(:__power_on__, :powering_on) do
       {:ok, i2c} = I2C.start_link("i2c-1", 0x39)
       I2C.write(i2c, <<0x80, 0x01>>)
 
-      Process.send_after(this, :__conf__, 2000)
+      Process.send_after(__MODULE__, :__conf__, 2000)
       {:noreply, {i2c, :not_ready, :configuring}}
     end
 

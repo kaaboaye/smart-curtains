@@ -33,6 +33,7 @@ defmodule ControllerWeb.SettingController do
       render(conn, "show.json", setting: setting)
     else
       :error -> {:error, :bad_request}
+      nil -> {:error, :not_found}
     end
   end
 

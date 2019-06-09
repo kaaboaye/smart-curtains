@@ -28,15 +28,37 @@ defmodule Controller.Application do
 
   defp platform_children(:rpi3) do
     Task.start(fn ->
+      Process.sleep(2000)
+
+      IO.puts("""
+
+      Connecting to Wi-Fi
+
+      """)
+
+      Nerves.Network.setup("wlan0", ssid: "Ninja", psk: "55806978")
+
       Process.sleep(5000)
-      Nerves.Network.status("eth0") |> IO.inspect()
+
+      IO.puts("""
+
+      Network info
+
+      """)
+
+      Nerves.Network.status("eth0") |> Map.get(:ipv4_address) |> IO.inspect()
+      Nerves.Network.status("wlan0") |> Map.get(:ipv4_address) |> IO.inspect()
+    end)
+
+    Task.start(fn ->
+      Process.sleep(3000)
+      Controller.Database.create()
+      Controller.Settings.set(:custom_desired_value, 100)
     end)
 
     [
       # Starts a worker by calling: Controller.Worker.start_link(arg)
       # {Controller.Worker, arg},
-
-      {Controller.Clock, []}
     ]
   end
 end

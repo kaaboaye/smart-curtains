@@ -10,7 +10,7 @@ import { Schedule } from "./containers/schedule/schedule";
 import { TaskEdit } from "./containers/task-edit/task-edit";
 
 function url(path) {
-  return `http://nerves.local/api${path}`;
+  return `/api${path}`;
 }
 
 function getCurrentState() {
@@ -28,8 +28,10 @@ function getTasks() {
 }
 
 function updateCurrentSetting(value) {
+  console.log(value);
+
   return axios
-    .patch(url("/settings/custom_desired_value", { value }))
+    .patch(url("/settings/custom_desired_value"), { value })
     .then(r => r.data.data.value)
     .catch(console.log);
 }

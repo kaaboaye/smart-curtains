@@ -63,3 +63,19 @@ config :nerves_init_gadget,
 config :controller, ControllerWeb.Endpoint,
   http: [port: 80],
   server: true
+
+config :nerves_time, :servers, [
+  "0.pool.ntp.org",
+  "1.pool.ntp.org",
+  "2.pool.ntp.org",
+  "3.pool.ntp.org"
+]
+
+# config :nerves_network,
+#   default: [
+#     wlan0: [
+#       [ssid: "Ninja", psk: "55806978", priority: 100],
+#       [ssid: "iThe", psk: "sexhim123", priority: 50]
+#     ],
+#     eth0: []
+#   ]

@@ -20,6 +20,21 @@ defmodule Controller.Tasks do
     end
   end
 
+  def list_past_tasks do
+    list_tasks()
+    |> Enum.filter(fn t ->
+      DateTime.diff(DateTime.utc_now(), time_to_datetime(t.scheduled_at)) >= 0
+    end)
+  end
+
+  def time_to_datetime(time) do
+    DateTime.utc_now()
+    |> Map.put(:hour, time.hour)
+    |> Map.put(:minute, time.minute)
+    |> Map.put(:second, time.second)
+    |> Map.put(:microsecond, time.microsecond)
+  end
+
   def get_task(id) do
     with {:ok, id} <- UniqueId.to_binary(id),
          %{} = task <- Amnesia.transaction!(do: Task.read(id)) do

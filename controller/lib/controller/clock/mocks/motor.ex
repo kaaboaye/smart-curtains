@@ -1,25 +1,25 @@
 defmodule Controller.Clock.Mocks.Motor do
   def start_link(_opts \\ []) do
-    {:ok, state} = Agent.start_link(fn -> :stop end, [])
-    {:ok, {:motor, state}}
+    {:ok, _state} = Agent.start_link(fn -> :stop end, name: __MODULE__)
+    {:ok, :mock_motor_pid}
   end
 
-  def go({:motor, agent}, :stop) do
-    Agent.update(agent, fn _ -> :stop end)
+  def direction(:stop) do
+    Agent.update(__MODULE__, fn _ -> :stop end)
     :ok
   end
 
-  def go({:motor, agent}, :left) do
-    Agent.update(agent, fn _ -> :left end)
+  def direction(:left) do
+    Agent.update(__MODULE__, fn _ -> :left end)
     :ok
   end
 
-  def go({:motor, agent}, :right) do
-    Agent.update(agent, fn _ -> :right end)
+  def direction(:right) do
+    Agent.update(__MODULE__, fn _ -> :right end)
     :ok
   end
 
-  def state({:motor, pid}) do
-    Agent.get(pid, & &1)
+  def direction do
+    Agent.get(__MODULE__, & &1)
   end
 end
